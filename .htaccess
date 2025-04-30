@@ -1,0 +1,26 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+ 
+ 
+# ensure https
+#RewriteCond %{HTTP:X-Forwarded-Proto} !https
+#RewriteCond %{HTTPS} off
+#RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+ 
+#redirect api calls
+ 
+RewriteRule ^api$ http://localhost:8082/ [P,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ http://localhost:8082/$1 [P,L]
+ 
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+ 
+ 
+# Rewrite everything else to index.html
+# to allow html5 state links
+RewriteRule ^ index.html [L]
+ 
+ </IfModule>
